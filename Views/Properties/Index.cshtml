@@ -1,0 +1,67 @@
+@model IEnumerable<PropertyWebApp.Models.Property>
+
+@{
+    ViewData["Title"] = "List Properties";
+}
+
+    <div>
+        <h1 class="display-4">@ViewData["Title"]</h1>
+
+        <p>
+            <a asp-action="Create" class="btn btn-sm btn-success">Create New</a>
+        </p>
+
+        @*<table class="table table-striped table-bordered">
+            <tr>
+                 <th>@Html.DisplayNameFor(model => model.propertyId)</th>
+                <th>@Html.DisplayNameFor(model => model.address)</th>
+                <th>@Html.DisplayNameFor(model => model.yearBuilt)</th>
+                <th>@Html.DisplayNameFor(model => model.listPrice)</th>
+                <th>@Html.DisplayNameFor(model => model.monthlyRent)</th>
+                <th>@Html.DisplayNameFor(model => model.grossYield)</th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.propertyId</td>
+                    <td>@item.address</td>
+                    <td>@item.yearBuilt</td>
+                    <td>@item.listPrice</td>
+                    <td>@item.monthlyRent</td>
+                    <td>@item.grossYield</td>
+                    <td style="text-align: center;">
+                        <a asp-action="Edit" asp-route-id="@item.propertyId" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.propertyId" class="btn btn-sm btn-info">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.propertyId" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </table>*@
+
+        @*<table class="table table-striped table-bordered">
+            <tr>
+                 <th>@Html.DisplayNameFor(model => model.propertyId)</th>
+                <th>@Html.DisplayNameFor(model => model.address)</th>
+                <th>@Html.DisplayNameFor(model => model.yearBuilt)</th>
+                <th>@Html.DisplayNameFor(model => model.listPrice)</th>
+                <th>@Html.DisplayNameFor(model => model.monthlyRent)</th>
+                <th>@Html.DisplayNameFor(model => model.grossYield)</th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.propertyId</td>
+                    <td>@item.address</td>
+                    <td>@item.yearBuilt</td>
+                    <td>@item.listPrice</td>
+                    <td>@item.monthlyRent</td>
+                    <td>@item.grossYield</td>
+                    <td style="text-align: center;">
+                        <a asp-action="Edit" asp-route-id="@item.propertyId" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.propertyId" class="btn btn-sm btn-info">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.propertyId" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </table>*@
+    </div>
