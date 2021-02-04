@@ -9,5 +9,7 @@ namespace PropertyWebApp.DataAccess
         {
 
         }
+
+        public DbSet<Property> Properties { get; set; }
     }
 }
