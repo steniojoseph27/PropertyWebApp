@@ -61,7 +61,7 @@ namespace PropertyWebApp.Models
         [JsonProperty("yearBuilt")]
         public long YearBuilt { get; set; }
     }
-    
+
     public enum Country { Usa };
 
     public enum State { Ca, Fl };
