@@ -17,11 +17,13 @@ namespace PropertyWebApp.Controllers
     {
 
         private readonly IHttpClientFactory _clientFactory;
+        private readonly PropertyDbContext _context;
 
         const string BASE_URL = "https://samplerspubcontent.blob.core.windows.net/public/properties.json";
-        public PropertiesController(IHttpClientFactory clientFactory)
+        public PropertiesController(IHttpClientFactory clientFactory, PropertyDbContext context)
         {
             _clientFactory = clientFactory;
+            _context = context;
         }
 
         string responseString = null;
@@ -42,11 +44,11 @@ namespace PropertyWebApp.Controllers
                 var propertiesResponse = JsonConvert.DeserializeObject<PropertyWebApp.Models.PropertyViewModel>(responseString);
                 var listOfProperties = propertiesResponse.Properties.Select(prop => new ListPropertyViewModel
                 {
-                    propertyId = prop.Id,
-                    address = prop.Address?.Address1 + " " + prop.Address?.City + " " + prop.Address?.Country + " " + prop.Address?.State + " " + prop.Address?.Zip,
-                    yearBuilt = prop.Physical == null ? 0 : prop.Physical.YearBuilt,
-                    listPrice = prop.Financial == null ? 1 : prop.Financial.ListPrice,
-                    monthlyRent = prop.Financial == null ? 0 : prop.Financial.MonthlyRent
+                    PropertyId = prop.Id,
+                    Address = prop.Address?.Address1 + " " + prop.Address?.City + " " + prop.Address?.Country + " " + prop.Address?.State + " " + prop.Address?.Zip,
+                    YearBuilt = prop.Physical == null ? 0 : prop.Physical.YearBuilt,
+                    ListPrice = prop.Financial == null ? 1 : prop.Financial.ListPrice,
+                    MonthlyRent = prop.Financial == null ? 0 : prop.Financial.MonthlyRent
                 })
                 .ToList();
 
@@ -55,43 +57,26 @@ namespace PropertyWebApp.Controllers
             return View();
         }
 
-        //public async Task<ActionResult> GetAPItringAsync(Property property)
-        //{
-        //    var model = JsonConvert.DeserializeObject<IEnumerable<Property>>(responseString);
-        //    return View(model);
-        //}
-        //public IActionResult Create() 
-        //{
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("propertyId, address, yearBuilt, listPrice, monthlyRent")] Property property)
-        //{
-        //    if (ModelState.IsValid) {
-        //        HttpContent httpContent = new StringContent (Newtonsoft.Json.JsonConvert.SerializeObject (property), Encoding.UTF8);
-        //        httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue ("application/json");
-
-        //        var message = new HttpRequestMessage ();
-        //        message.Content = httpContent;
-        //        message.Method = HttpMethod.Post;
-        //        message.RequestUri = new Uri ($"{BASE_URL}api/properties");
-
-        //        HttpClient client = _clientFactory.CreateClient ();
-        //        HttpResponseMessage response = await client.SendAsync (message);
-
-        //        var result = await response.Content.ReadAsStringAsync ();
-
-        //        return RedirectToAction (nameof (Index));
-        //    }
-
-        //    return View (property);
-        //}
+        
         [HttpPost]
         public ActionResult Save(ListPropertyViewModel model)
         {
-            return Json(new { message = "Hola" });
+            var property = new Property
+            {
+                Address = model.Address,
+                YearBuilt = model.YearBuilt,
+                MonthlyRent = model.MonthlyRent,
+                ListPrice = model.ListPrice,
+                GrossYield = model.GrossYield
+            };
+
+            using (_context)
+            {
+                _context.Properties.Add(property);
+                _context.SaveChanges();
+            }
+
+            return Json(model);
         }
     }
 }
