@@ -8,16 +8,15 @@ using System.Text.Json;
 using System.Text;
 using Newtonsoft.Json;
 using PropertyWebApp.DataAccess;
+using PropertyWebApp.ViewModels;
+using System.Linq;
 
 namespace PropertyWebApp.Controllers
 {
     public class PropertiesController : Controller
     {
-        private PropertyDbContext db = new PropertyDbContext();
 
         private readonly IHttpClientFactory _clientFactory;
-
-        //public IEnumerable<PropertyViewModel> Properties {get; set;}
 
         const string BASE_URL = "https://samplerspubcontent.blob.core.windows.net/public/properties.json";
         public PropertiesController(IHttpClientFactory clientFactory)
@@ -37,23 +36,34 @@ namespace PropertyWebApp.Controllers
 
             var response = await client.SendAsync(message);
 
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
-                responseString= await response.Content.ReadAsStringAsync();
-                var properties = JsonConvert.DeserializeObject<PropertyWebApp.Models.PropertyViewModel>(responseString);
+                responseString = await response.Content.ReadAsStringAsync();
+                var propertiesResponse = JsonConvert.DeserializeObject<PropertyWebApp.Models.PropertyViewModel>(responseString);
+                var listOfProperties = propertiesResponse.Properties.Select(prop => new ListPropertyViewModel
+                {
+                    propertyId = prop.Id,
+                    address = prop.Address?.Address1 + " " + prop.Address?.City + " " + prop.Address?.Country + " " + prop.Address?.State + " " + prop.Address?.Zip,
+                    yearBuilt = prop.Physical == null ? 0 : prop.Physical.YearBuilt,
+                    listPrice = prop.Financial == null ? 1 : prop.Financial.ListPrice,
+                    monthlyRent = prop.Financial == null ? 0 : prop.Financial.MonthlyRent
+                })
+                .ToList();
+
+                return View(listOfProperties);
             }
             return View();
         }
 
-        public async Task<ActionResult> GetAPItringAsync(Property property)
-        {
-            var model = JsonConvert.DeserializeObject<IEnumerable<Property>>(responseString);
-            return View(model);
-        }
-        public IActionResult Create() 
-        {
-            return View();
-        }
+        //public async Task<ActionResult> GetAPItringAsync(Property property)
+        //{
+        //    var model = JsonConvert.DeserializeObject<IEnumerable<Property>>(responseString);
+        //    return View(model);
+        //}
+        //public IActionResult Create() 
+        //{
+        //    return View();
+        //}
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
@@ -78,5 +88,10 @@ namespace PropertyWebApp.Controllers
 
         //    return View (property);
         //}
+        [HttpPost]
+        public ActionResult Save(ListPropertyViewModel model)
+        {
+            return Json(new { message = "Hola" });
+        }
     }
 }

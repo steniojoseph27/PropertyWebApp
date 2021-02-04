@@ -1,67 +1,34 @@
-@model IEnumerable<PropertyWebApp.Models.Property>
+@model IEnumerable<PropertyWebApp.ViewModels.ListPropertyViewModel>
 
 @{
-    ViewData["Title"] = "List Properties";
+    ViewData["Title"] = "List of Properties";
 }
 
     <div>
         <h1 class="display-4">@ViewData["Title"]</h1>
-
-        <p>
-            <a asp-action="Create" class="btn btn-sm btn-success">Create New</a>
-        </p>
-
-        @*<table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered">
             <tr>
-                 <th>@Html.DisplayNameFor(model => model.propertyId)</th>
-                <th>@Html.DisplayNameFor(model => model.address)</th>
-                <th>@Html.DisplayNameFor(model => model.yearBuilt)</th>
-                <th>@Html.DisplayNameFor(model => model.listPrice)</th>
-                <th>@Html.DisplayNameFor(model => model.monthlyRent)</th>
-                <th>@Html.DisplayNameFor(model => model.grossYield)</th>
+                
+                <th>Address</th>
+                <th>Year Built</th>
+                <th>List Price $</th>
+                <th>Monthly Rent $</th>
+                <th>Gross Yield %</th>
             </tr>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.propertyId</td>
+                    
                     <td>@item.address</td>
                     <td>@item.yearBuilt</td>
-                    <td>@item.listPrice</td>
-                    <td>@item.monthlyRent</td>
-                    <td>@item.grossYield</td>
+                    <td>@(string.Format("{0:C}", item.listPrice))</td>
+                    <td>@(string.Format("{0:C}", item.monthlyRent))</td>
+                    <td>@($"{Math.Round(item.grossYield,2)}%") </td>
                     <td style="text-align: center;">
-                        <a asp-action="Edit" asp-route-id="@item.propertyId" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.propertyId" class="btn btn-sm btn-info">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.propertyId" class="btn btn-sm btn-danger">Delete</a>
+                        @*<a asp-action="Save" asp-route-id="@item.propertyId" class="btn btn-sm btn-primary">Save</a>*@
+                        <button class="btn btn-sm btn-primary btnSave" > Save</button>
                     </td>
                 </tr>
             }
-        </table>*@
-
-        @*<table class="table table-striped table-bordered">
-            <tr>
-                 <th>@Html.DisplayNameFor(model => model.propertyId)</th>
-                <th>@Html.DisplayNameFor(model => model.address)</th>
-                <th>@Html.DisplayNameFor(model => model.yearBuilt)</th>
-                <th>@Html.DisplayNameFor(model => model.listPrice)</th>
-                <th>@Html.DisplayNameFor(model => model.monthlyRent)</th>
-                <th>@Html.DisplayNameFor(model => model.grossYield)</th>
-            </tr>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.propertyId</td>
-                    <td>@item.address</td>
-                    <td>@item.yearBuilt</td>
-                    <td>@item.listPrice</td>
-                    <td>@item.monthlyRent</td>
-                    <td>@item.grossYield</td>
-                    <td style="text-align: center;">
-                        <a asp-action="Edit" asp-route-id="@item.propertyId" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.propertyId" class="btn btn-sm btn-info">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.propertyId" class="btn btn-sm btn-danger">Delete</a>
-                    </td>
-                </tr>
-            }
-        </table>*@
+        </table>
     </div>

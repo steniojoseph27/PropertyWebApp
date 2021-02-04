@@ -44,8 +44,4 @@ namespace PropertyWebApp.Models
         public int yearBuilt {get; set;}
     }
 
-    public class Property
-    {
-
-    }
 }
